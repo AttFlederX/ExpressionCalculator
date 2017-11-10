@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressionCalculator", "ExpressionCalculator\ExpressionCalculator.csproj", "{94F408E3-CB64-4131-8331-9B275B64C55B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94F408E3-CB64-4131-8331-9B275B64C55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F408E3-CB64-4131-8331-9B275B64C55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F408E3-CB64-4131-8331-9B275B64C55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F408E3-CB64-4131-8331-9B275B64C55B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9354F7A-8F01-4D4A-90E6-3C05A689B3B5}
+	EndGlobalSection
+EndGlobal
