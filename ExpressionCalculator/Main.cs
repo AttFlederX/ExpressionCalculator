@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* ExpressionCalculator
+ * v1.0
+ * 2017, AttFlederX */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
