@@ -11,8 +11,6 @@ namespace ExpressionCalculator
     /// </summary>
     class RPNConverter
     {
-        static string[] arithOpList = { "+", "-", "*", "/", "^" };
-        static string[] funcOpList = { "sin", "cos", "tan", "asin", "acos", "atan", "log", "ln", "√", "floor", "ceil" };
         public enum AssocType {Left, Right};
 
         public static int GetPrecedence(string op)
@@ -47,7 +45,7 @@ namespace ExpressionCalculator
                 {
                     output.Add(token);
                 }
-                else if (arithOpList.Contains(token)) // if token is an operator
+                else if (Main.arithOpList.Contains(token)) // if token is an operator
                 {
                     if (opStack.Count > 0) // if the operator stack is empty, the Peek method will throw an exception
                     {
@@ -65,7 +63,7 @@ namespace ExpressionCalculator
 
                     opStack.Push(token);
                 }
-                else if (funcOpList.Contains(token) ||token == "(")
+                else if (Main.funcOpList.Contains(token) ||token == "(")
                 {
                     opStack.Push(token);
                 }
@@ -78,7 +76,7 @@ namespace ExpressionCalculator
                     }
                     opStack.Pop(); // pops the "("
 
-                    while (opStack.Count > 0 && funcOpList.Contains(opStack.Peek())) // pop all remainig functions
+                    while (opStack.Count > 0 && Main.funcOpList.Contains(opStack.Peek())) // pop all remainig functions
                     {
                         output.Add(opStack.Pop());
                     }
@@ -88,7 +86,7 @@ namespace ExpressionCalculator
             while (opStack.Count > 0) // pop all remaining operators
             {
                 stackTop = opStack.Peek();
-                if (arithOpList.Contains(stackTop) || funcOpList.Contains(stackTop))
+                if (Main.arithOpList.Contains(stackTop) || Main.funcOpList.Contains(stackTop))
                 {
                     output.Add(opStack.Pop());
                 }

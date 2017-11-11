@@ -1,5 +1,5 @@
 ﻿/* ExpressionCalculator
- * v1.0
+ * v2.0
  * 2017, AttFlederX */
 
 using System;
@@ -16,6 +16,12 @@ namespace ExpressionCalculator
 {
     public partial class Main : Form
     {
+        public static string[] arithOpList = { "+", "-", "*", "/", "^" };
+        public static string[] funcOpList = { "sin", "cos", "tan", "asin", "acos", "atan", "log", "ln", "√", "floor", "ceil",
+            "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "negate" };
+
+        private readonly Button[] trigFuncButtons; // for trigonometric/hyperbolic modes
+
         bool isOperatorLastReceived = true; // prevents operators from being typed in a row 
         bool isDecimalPointReceived = false; // prevents more than one decimal point from appearing in a single number
         bool initialState = true;
@@ -28,6 +34,8 @@ namespace ExpressionCalculator
         public Main()
         {
             InitializeComponent();
+
+            trigFuncButtons = new Button[]{ sinButton, cosButton, tanButton, asinButton, acosButton, atanButton };
             ResetState();
             ClearInput();
         }
@@ -68,6 +76,13 @@ namespace ExpressionCalculator
             resultState = false;
         }
 
+        private double getAngleCoef()
+        {
+            if (degRadioButton.Checked) { return Math.PI / 180; } // degree-to-radian
+            if (gradRadioButton.Checked) { return Math.PI / 200; } // gradian-to-radian
+
+            return 1;
+        }
 
         /// <summary>
         /// Handles the 1 through 9 digit buttons 
@@ -129,24 +144,24 @@ namespace ExpressionCalculator
         }
 
         /// <summary>
-        /// Changes the sign of the number(has to be put before entering the number)
+        /// Negation function (has to be put before entering the number)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void plusMinusButton_Click(object sender, EventArgs e)
         {
-            if (isOperatorLastReceived || inputTextBox.Text.EndsWith("-"))
+            if (isOperatorLastReceived || inputTextBox.Text.EndsWith("negate ( "))
             {
                 ResetState();
 
-                if (inputTextBox.Text.EndsWith("-")) // changes back to positive
+                if (inputTextBox.Text.EndsWith("negate ( ")) // changes back to positive
                 {
-                    inputTextBox.Text = inputTextBox.Text.Remove(inputTextBox.Text.Length - 1);
+                    inputTextBox.Text = inputTextBox.Text.Remove(inputTextBox.Text.Length - 9);
                     if (inputTextBox.Text.Length == 0) { ClearInput(); }
                 }
                 else
                 {
-                    inputTextBox.Text += "-";
+                    inputTextBox.Text += "negate ( ";
                 }
             }
         }
@@ -191,7 +206,7 @@ namespace ExpressionCalculator
         private void equalsButton_Click(object sender, EventArgs e)
         {
             // converts the expression into reverse Polish notation and immidiately calculates the result
-            double? result = RPNCalculator.Calculate(RPNConverter.Convert(inputTextBox.Text.Split(' ')));
+            double? result = RPNCalculator.Calculate(RPNConverter.Convert(inputTextBox.Text.Split(' ')), getAngleCoef());
             // MessageBox.Show(string.Join(string.Empty, RPNConverter.Convert(inputTextBox.Text.Split(' ')).ToArray()));
 
             if (result == null)
@@ -304,8 +319,8 @@ namespace ExpressionCalculator
                 }
                 else if (isOperatorLastReceived)
                 {
-                    while (!char.IsDigit(inputTextBox.Text[inputTextBox.Text.Length - 1]) && !inputTextBox.Text.EndsWith(" )") &&
-                        !inputTextBox.Text.EndsWith("( ")) // remove the operator and the spaces
+                    while (inputTextBox.Text.Length > 0 && !char.IsDigit(inputTextBox.Text[inputTextBox.Text.Length - 1]) && 
+                        !inputTextBox.Text.EndsWith(" )") && !inputTextBox.Text.EndsWith("( ")) // remove the operator and the spaces
                     {
                         inputTextBox.Text = inputTextBox.Text.Remove(inputTextBox.Text.Length - 1);
                     }
@@ -315,7 +330,7 @@ namespace ExpressionCalculator
                     inputTextBox.Text = inputTextBox.Text.Remove(inputTextBox.Text.Length - 1);
                 }
 
-                if (inputTextBox.Text.Length == 0) // if the input field is empty afteer the backspace
+                if (inputTextBox.Text.Length == 0) // if the input field is empty after the backspace
                 {
                     ClearInput();
                 }
@@ -474,6 +489,29 @@ namespace ExpressionCalculator
             historyListBox.Items.Clear();
             resultHistory.Clear();
             clearHistoryButton.Enabled = false;
+        }
+
+        /// <summary>
+        /// Hyperbolic mode switch
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void hyperbolicModeCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (hyperbolicModeCheckBox.Checked)
+            {
+                foreach (Button b in trigFuncButtons)
+                {
+                    b.Text += "h"; // since the function type is determined by button text, this is all that's needed
+                }
+            }
+            else
+            {
+                foreach (Button b in trigFuncButtons)
+                {
+                    b.Text = b.Text.Trim('h'); // since the function type is determined by button text, this is all that's needed
+                }
+            }
         }
     }
 }
